@@ -39,8 +39,6 @@ If you need a new package: add it to `requirements.txt`, commit, tell your teamm
 | `report/` | the proposal, mid-project report, and final report | yes |
 | `poster/` | the one-slide poster | yes |
 
-Add `data/` to `.gitignore` so nobody commits a 1.2 GB file by accident.
-
 ## What the script does
 
 | Step | What happens |
