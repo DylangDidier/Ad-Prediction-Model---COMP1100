@@ -17,7 +17,7 @@ ax.bar(hour.hour_of_day, hour.ctr * 100, color="#4C72B0")
 ax.axhline(overall * 100, color="grey", ls="--", lw=1, label=f"Overall CTR ({overall:.1%})")
 ax.set_xticks(range(0, 24, 2)); ax.set_xlabel("Hour of day (0 = midnight)")
 ax.set_ylabel("Click-through rate (%)"); ax.set_ylim(0, 22)
-ax.set_title("CTR by hour of day (training sample, 162,483 impressions)")
+ax.set_title(f"CTR by hour of day (training sample, {hour.impressions.sum():,} impressions)")
 ax.legend(loc="lower right"); fig.tight_layout(); fig.savefig(f"{out}/ctr_by_hour.png", dpi=150)
 
 # Figure 3: CTR by site category and device type
