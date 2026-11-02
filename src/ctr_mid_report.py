@@ -39,10 +39,12 @@ SMOOTHING = 20           # pseudo-impressions pulling small baseline groups to t
 TOP_SHARE = 0.10         # "top 10%" for click capture
 RARE_SITE_COUNT = 20     # sites seen fewer times than this in training count as rare
 SEED = 42
+USE_CACHE = True         # reuse the saved sample instead of re-reading the big file
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "raw" / "train.gz"
 OUT = ROOT / "outputs"
+CACHE_DIR = ROOT / "data" / "cache"
 
 DROP_COLS = ["id", "click", "hour", "device_id", "device_ip"]
 BASELINE_KEYS = ["site_category", "device_type", "banner_pos"]
@@ -56,6 +58,20 @@ def log(msg):
 
 # ---------------------------------------------------------------- 1. sample
 def load_sample(path=None):
+    """Return the sample, from the cache if this exact sample was saved before."""
+    cache = CACHE_DIR / f"sample_frac{SAMPLE_FRAC}_seed{SEED}.pkl"
+    if USE_CACHE and cache.exists():
+        log(f"  loading cached sample from {cache.relative_to(ROOT)}")
+        return pd.read_pickle(cache)
+    df = read_sample(path)
+    if USE_CACHE:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        df.to_pickle(cache)
+        log(f"  saved sample to {cache.relative_to(ROOT)} for next time")
+    return df
+
+
+def read_sample(path=None):
     """Read train.gz in chunks and keep SAMPLE_FRAC of each chunk."""
     path = path or DATA_PATH
     if not path.exists() and path.with_suffix(".csv").exists():
