@@ -34,7 +34,7 @@ If you need a new package: add it to `requirements.txt`, commit, tell your teamm
 | `data/raw/` | `train.gz` from Kaggle | no (too big; everyone downloads their own) |
 | `src/` | shared scripts: sampling, features, baseline, model, evaluation | yes |
 | `notebooks/<your name>/` | your own scratch notebooks | yes, but nobody else runs them |
-| `outputs/` | `results.csv`, `loss_curve.png`, `click_capture.png`, and the `ctr_by_*.csv` tables for Excel | yes |
+| `outputs/` | `results.csv`, `loss_curve.png`, `click_capture.png`, `feature_importance.*`, and the `ctr_by_*.csv` tables for Excel | yes |
 | `excel/` | the Excel workbook with the baseline pivot tables and charts | yes |
 | `report/` | the proposal, mid-project report, and final report | yes |
 | `poster/` | the one-slide poster | yes |
@@ -49,6 +49,14 @@ If you need a new package: add it to `requirements.txt`, commit, tell your teamm
 | 4. Model | Gives each of the 21 features an 8-number embedding, then two dense layers (128 and 64) and a sigmoid output. Trained with Adam and stops early once validation loss stops improving. |
 | 5. Evaluate | Compares AUC, log loss, and the share of clicks caught in the top 10% of predictions on the test day. |
 | 6. Failure check | Compares AUC on sites that were common in training with sites that were rare or new. |
+
+## Feature importance
+
+After `ctr_mid_report.py` has run once (so the sample is cached), right-click `src/feature_importance.py` > **Run**. It rebuilds the same features, trains the same model (or reuses the one saved in `data/cache/`), then shuffles one feature at a time on the test day and measures how much AUC drops and log loss rises. It repeats each shuffle 5 times. Features that carry the same information (like `site_id` and `site_domain`) can cover for each other when shuffled alone, so it also shuffles related features together as groups (site, app, device, time, the anonymous C columns).
+
+Output: `outputs/feature_importance.csv` (per feature), `outputs/feature_importance_groups.csv` (per group), and `outputs/feature_importance.png` (both as bar charts, for the final report and poster).
+
+`day_of_week` always scores 0: the test set is a single day, so every test row has the same day of week and shuffling it changes nothing. Its effect can't be measured with this test split.
 
 Knobs (`SAMPLE_FRAC`, `EMB_DIM`, `HIDDEN`, `DROPOUT`, `LR`, and so on) are at the top of the script. Set `SAMPLE_FRAC = 0.0125` for about 500k rows.
 
