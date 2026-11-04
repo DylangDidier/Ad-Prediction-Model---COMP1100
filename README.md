@@ -35,7 +35,7 @@ If you need a new package: add it to `requirements.txt`, commit, tell your teamm
 | `src/` | shared scripts: sampling, features, baseline, model, evaluation | yes |
 | `notebooks/<your name>/` | your own scratch notebooks | yes, but nobody else runs them |
 | `outputs/` | `results.csv`, `loss_curve.png`, `click_capture.png`, `feature_importance.*`, and the `ctr_by_*.csv` tables for Excel | yes |
-| `excel/` | the Excel workbook with the baseline pivot tables and charts | yes |
+| `excel/` | `ctr_pivot_tables.xlsx`, the Excel workbook of CTR pivot tables and charts | yes |
 | `report/` | the proposal, mid-project report, and final report | yes |
 | `poster/` | the one-slide poster | yes |
 
@@ -61,6 +61,14 @@ Output: `outputs/feature_importance.csv` (per feature), `outputs/feature_importa
 Knobs (`SAMPLE_FRAC`, `EMB_DIM`, `HIDDEN`, `DROPOUT`, `LR`, and so on) are at the top of the script. Set `SAMPLE_FRAC = 0.005` for the smaller 200k-row sample used in the mid-report.
 
 Don't report accuracy. Most ads aren't clicked, so "never clicks" looks accurate and is useless.
+
+## Excel pivot tables
+
+After `ctr_mid_report.py` has run once (so the sample is cached), right-click `src/make_excel_workbook.py` > **Run**. It takes under a minute and writes `excel/ctr_pivot_tables.xlsx`.
+
+The `Data` sheet has every row of the sample (504,689 at `SAMPLE_FRAC = 0.0125`) with its split (train, validation, test), date, day of week, hour, site and app category, device type, banner position, connection type, and click. The other sheets are real Excel pivot tables on that sheet: impressions (count of click), clicks (sum of click) and CTR (average of click) by hour, day of week, site category, app category, device type, banner position and connection type, each with a chart, plus two CTR grids shaded like heatmaps (site category by device type, which are the baseline's groups, and hour by day of week).
+
+Every pivot table is filtered to `split = train`, so its numbers match `outputs/ctr_by_*.csv`. Change the filter (cell B3) to (All) to see the whole sample. Excel refreshes the pivot tables when the file opens; if it opens in Protected View, click **Enable Editing** first.
 
 ## Mid-project report checklist
 
