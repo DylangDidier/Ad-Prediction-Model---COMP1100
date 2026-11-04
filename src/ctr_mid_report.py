@@ -23,7 +23,7 @@ from sklearn.metrics import log_loss, roc_auc_score
 from torch import nn
 
 # ---------------------------------------------------------------- knobs
-SAMPLE_FRAC = 0.005      # 0.005 is about 200k rows; 0.0125 is about 500k
+SAMPLE_FRAC = 0.0125     # 0.0125 is about 500k rows; 0.005 is about 200k
 CHUNK_SIZE = 1_000_000   # rows read from train.gz at a time
 TEST_DAY = "141030"      # YYMMDD of the held-out test day (2014-10-30)
 VAL_FRAC = 0.10          # share of the non-test rows kept aside for validation

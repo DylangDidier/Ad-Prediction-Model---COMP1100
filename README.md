@@ -43,7 +43,7 @@ If you need a new package: add it to `requirements.txt`, commit, tell your teamm
 
 | Step | What happens |
 | --- | --- |
-| 1. Sample | Reads `train.gz` in 1M-row chunks and keeps 0.5% of each (about 200k rows). The last day (2014-10-30) is the test set, and 10% of the rest is kept aside for validation. |
+| 1. Sample | Reads `train.gz` in 1M-row chunks and keeps 1.25% of each (about 500k rows). The last day (2014-10-30) is the test set, and 10% of the rest is kept aside for validation. |
 | 2. Features | Splits `hour` into hour of day and day of week, maps each category to an ID (values seen fewer than 10 times become "other"), and drops `device_id` and `device_ip`. |
 | 3. Baseline | Predicts each test ad's click rate from the past average for its site category, device type, and banner position, which is the Excel pivot-table approach. |
 | 4. Model | Gives each of the 21 features an 8-number embedding, then two dense layers (128 and 64) and a sigmoid output. Trained with Adam and stops early once validation loss stops improving. |
@@ -58,7 +58,7 @@ Output: `outputs/feature_importance.csv` (per feature), `outputs/feature_importa
 
 `day_of_week` always scores 0: the test set is a single day, so every test row has the same day of week and shuffling it changes nothing. Its effect can't be measured with this test split.
 
-Knobs (`SAMPLE_FRAC`, `EMB_DIM`, `HIDDEN`, `DROPOUT`, `LR`, and so on) are at the top of the script. Set `SAMPLE_FRAC = 0.0125` for about 500k rows.
+Knobs (`SAMPLE_FRAC`, `EMB_DIM`, `HIDDEN`, `DROPOUT`, `LR`, and so on) are at the top of the script. Set `SAMPLE_FRAC = 0.005` for the smaller 200k-row sample used in the mid-report.
 
 Don't report accuracy. Most ads aren't clicked, so "never clicks" looks accurate and is useless.
 
