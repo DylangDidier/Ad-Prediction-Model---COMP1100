@@ -70,16 +70,6 @@ The `Data` sheet has every row of the sample (504,689 at `SAMPLE_FRAC = 0.0125`)
 
 Every pivot table is filtered to `split = train`, so its numbers match `outputs/ctr_by_*.csv`. Change the filter (cell B3) to (All) to see the whole sample. Excel refreshes the pivot tables when the file opens; if it opens in Protected View, click **Enable Editing** first.
 
-## Mid-project report checklist
-
-- [ ] `train.gz` in `data/raw/` on both machines
-- [ ] Script runs end to end, and `outputs/` has `results.csv` and both charts
-- [ ] Excel charts made from the `ctr_by_*.csv` tables
-- [ ] Model diagram (features > embeddings > dense layers > click probability)
-- [ ] Screenshot of the script running
-- [ ] What works, what doesn't, and what's left written down
-- [ ] Report is 2–3 pages, saved as `LastName_LastName_MidReport.pdf`
-
 ## Final report checklist
 
 - [ ] Edit this
